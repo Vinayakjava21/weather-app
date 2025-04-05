@@ -57,7 +57,7 @@ public class WeatherController {
         String body = weatherService.formatEmailBody(location, weatherData);
 
         try {
-            emailService.sendWeatherEmail(request.getEmail(), "Your Weather Report 🌤️", body);
+            emailService.sendWeatherEmail(request.getEmail(), "Your Weather Repor 🌤️", body);
             model.addAttribute("location", location);
             model.addAttribute("email", request.getEmail());
             return "success"; // show success.html
