@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2>🌤️ Weather Fetcher</h2>
+        <p>👋 Welcome! Enter your email and weather location. You can auto-fill your location using the button below.</p>
+    </div>
+
+    <form method="get" action="/weather/send-email" class="border p-4 rounded shadow-sm bg-light">
+        <div class="mb-3">
+            <label for="email" class="form-label">📧 Email address <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="your@example.com" required>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="city" class="form-label">🏙️ City</label>
+                <input type="text" class="form-control" id="city" name="city" placeholder="City">
+            </div>
+            <div class="col-md-4">
+                <label for="state" class="form-label">🌆 State</label>
+                <input type="text" class="form-control" id="state" name="state" placeholder="State">
+            </div>
+            <div class="col-md-4">
+                <label for="country" class="form-label">🌍 Country</label>
+                <input type="text" class="form-control" id="country" name="country" placeholder="Country">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button type="button" class="btn btn-outline-primary" onclick="getLocation()">
+                <i class="bi bi-geo-alt-fill"></i> Auto-Fill Location
+            </button>
+        </div>
+
+        <button type="submit" class="btn btn-success">📩 Send Weather Report</button>
+    </form>
+</div>
+
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`);
+                const data = await response.json();
+
+                document.getElementById('city').value = data.address.city || data.address.town || data.address.village || '';
+                document.getElementById('state').value = data.address.state || '';
+                document.getElementById('country').value = data.address.country || '';
+            }, function(error) {
+                alert('Failed to get your location. Please allow location access.');
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+</script>
+
+</body>
+</html>
