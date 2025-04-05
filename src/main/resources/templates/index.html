@@ -19,6 +19,11 @@
     </div>
 
     <form method="get" action="/weather/send-email" class="border p-4 rounded shadow-sm bg-light">
+
+        <div th:if="${customError}" class="alert alert-danger">
+            <p th:text="${customError}"></p>
+        </div>
+
         <div class="mb-3">
             <label for="email" class="form-label">📧 Email address <span class="text-danger">*</span></label>
             <input type="email" class="form-control" id="email" name="email" placeholder="your@example.com" required>
