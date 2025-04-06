@@ -58,6 +58,10 @@ public class WeatherController {
                 .collect(Collectors.joining(", "));
 
         String json = weatherService.fetchWeather(location);
+        if(json==null ){
+            model.addAttribute("customError", "Provided (city/state/country) is incorrect!!!!");
+            return "index";
+        }
         JsonNode weatherData = new ObjectMapper().readTree(json);
         String body = weatherService.formatEmailBody(location, weatherData);
 
